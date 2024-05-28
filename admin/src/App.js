@@ -15,7 +15,12 @@ import Comptes from './compte';
 import Transaction from './transaction';
 
 function App() {
- 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate('/login'); // Redirige vers la page de connexion au montage du composant
+  }, []);
+
 
   return (
     <div style={{ display: 'flex' }} >

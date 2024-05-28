@@ -1,8 +1,9 @@
 import React, { useState, useEffect} from 'react';
-
+import { useLocation } from 'react-router-dom';
 import "./allusers.css";
 import axios from "axios";
-
+import FileSaver from "file-saver";
+import * as XLSX from 'xlsx';
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   Table,
@@ -18,7 +19,7 @@ import {
 
 
 export default function Users() {
- 
+  const location = useLocation();
     const [Users, setUser] = useState(null);
     const[updatedUser,setUpdatedUser]=useState({username:"",email:"",password:""
     });
@@ -32,6 +33,8 @@ export default function Users() {
       });
     const [modalActualizar, setModalActualizar]=useState(false);
     const [model,setModal]=useState(false);
+    const searchParams = new URLSearchParams(location.search);
+    const search = searchParams.get('search') || '';
     useEffect(() => {
         // Fonction asynchrone pour effectuer la requête
         const fetchData = async () => {
@@ -52,7 +55,28 @@ export default function Users() {
         fetchData();
       }, []);
      
+      const ExportHandler = async () => {
+       
+        console.log(Users);
+          const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+          const fileExtension = '.xlsx';
       
+          const exportData = Users.map(item => ({
+            // Customize this according to your data structure
+            username: item.username,
+            email: item.email,
+            role: item.role,
+           
+          }));
+      
+          const ws = XLSX.utils.json_to_sheet(exportData);
+          const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+          const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+          const dataBlob = new Blob([excelBuffer], { type: fileType });
+      
+          FileSaver.saveAs(dataBlob, "users" + fileExtension);
+      };
+
 
       const handleChange = (e) => {
        
@@ -130,6 +154,7 @@ export default function Users() {
         <Container>
         <br />
           <Button color="success" onClick={() => adduser()}>Créer</Button>
+          <Button color="success" onClick={ExportHandler}>Excel</Button>
           <br />
           <br />
           <Table>
@@ -144,7 +169,9 @@ export default function Users() {
             </thead>
 
             <tbody>
-              {Users &&Users.map((data) => (
+              {Users &&Users
+               .filter(Users => search.trim() === '' || Users.username.toLowerCase().includes(search.toLowerCase()))
+              .map((data) => (
                 <tr key={data.id}>
                   
                   <td>{data.email}</td>

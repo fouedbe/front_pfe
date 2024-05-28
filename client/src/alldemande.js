@@ -22,7 +22,7 @@ import {
 
 
 export default function Demandes() {
-  
+  const [searchTerm, setSearchTerm] = useState('');
    const [email, setemail] = useState(null);
     const [Users, setUser] = useState(null);
     const [Demandes, setDemandes] = useState(null);
@@ -184,52 +184,66 @@ export default function Demandes() {
       };
     return (
       
-      <div className="regg">
-      <div className="card">
-        <Container>
-        <br />
-          <Button color="success" onClick={() => adddemande()}>Créer</Button>
-          <Button color="success" onClick={ExportHandler}>Excel</Button>
-          <br />
-          <br />
-          <Table>
-            <thead>
-              <tr>
+      <div className="demandeall">
+     
+      <main className="tablee" >
+        <section className="table__header">
+            <h1>Customer's Orders</h1>
+            <div className="input-groupp">
+                <input type="search" placeholder="Search Data..."  value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}/>
+                <img src="../public/assets/img/search.png" alt="" />
+            </div>
+            <h1>add demande :</h1>
+            <div className="export__file">
+           
+                <label for="export-file" className="export__file-btn" title="Export File" onClick={() => adddemande()}></label>
                
-                <th>title</th>
-                <th>description</th>
-                <th>quantity</th>
-                <th>status</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {Demandes &&Demandes
-              .filter(Demandes => Demandes.emailuser === email)
+            </div>
+        </section>
+        <section className="table__body">
+            <table >
+                <thead >
+                    <tr >
+                    
+               
+               <th><h1>title</h1></th>
+               <th><h1>description</h1></th>
+               <th><h1>quantity</h1></th>
+               <th><h1>satatus</h1></th>
+             
+                    </tr>
+                </thead>
+                <tbody >
+                {Demandes &&Demandes
+              .filter(Demandes => Demandes.emailuser === email &&
+                Demandes.title.toLowerCase().includes(searchTerm.toLowerCase()) )
               .map((data) => (
                 <tr key={data.id}>
                   
                   <td>{data.title}</td>
                   <td>{data.description}</td>
-                  <th>{data.quantity}</th>
-                  <th>{data.status}</th>
+                  <td>{data.quantity}</td>
+                  <td>{data.status}</td>
                   
                   <td>
                     <Button
                       color="primary"
                       onClick={() =>update(data)}
                     >
-                      update
+                      <i className="fas fa-edit"></i>
                     </Button>{" "}
-                    <Button color="primary"  onClick={() =>confirm(data)}>confirm</Button>
-                    <Button color="danger"  onClick={() => handleDelete(data._id)}>delete</Button>
+                    
+                    <Button color="danger"  onClick={() => handleDelete(data._id)}> <i className="fas fa-trash-alt"></i> </Button>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Container>
-      </div>
+              ))}  
+                   
+                </tbody>
+            </table>
+        </section>
+    </main>
+      
         <Modal isOpen={modalActualizar}  >
         
           <ModalHeader>

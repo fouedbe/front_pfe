@@ -31,3 +31,34 @@
     border-color: #0056b3;
   }
   
+  
+.Embed-container {
+  height: 980px;
+  width: 1000px;
+}
+
+
+
+.App-header {
+  
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

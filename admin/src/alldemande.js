@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import logo from "./logo.svg";
 import "./alldemande.css";
+import { useLocation } from 'react-router-dom';
 import axios from "axios";
 import FileSaver from "file-saver";
 import * as XLSX from 'xlsx';
@@ -23,7 +24,7 @@ import {
 
 export default function Demandes() {
   
-    
+  const location = useLocation();
     const [Users, setUser] = useState(null);
     
     const [Demandes, setDemandes] = useState(null);
@@ -40,8 +41,9 @@ export default function Demandes() {
     const [modalActualizar, setModalActualizar]=useState(false);
     const [model,setModal]=useState(false);
     const [confmodel,setConfModal]=useState(false);
-   
-    
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const searchParams = new URLSearchParams(location.search);
+  const search = searchParams.get('search') || '';
     useEffect(() => {
       
         // Fonction asynchrone pour effectuer la requête
@@ -53,6 +55,7 @@ export default function Demandes() {
            
             // Récupérer les données de la réponse et les stocker dans l'état
             setDemandes(response.data);
+           
             console.log(localStorage);
           } catch (error) {
             // Gérer les erreurs en cas d'échec de la requête
@@ -91,7 +94,8 @@ export default function Demandes() {
             Title: item.title,
             Description: item.description,
             Quantity: item.quantity,
-            Price: item.price,
+            emailuser: item.emailuser,
+            nombre:Demandes.length
           }));
       
           const ws = XLSX.utils.json_to_sheet(exportData);
@@ -203,7 +207,7 @@ export default function Demandes() {
 
             <tbody>
               {Demandes &&Demandes
-              
+              .filter(Demandes => search.trim() === '' || Demandes.title.toLowerCase().includes(search.toLowerCase()))
               .map((data) => (
                 <tr key={data.id}>
                   

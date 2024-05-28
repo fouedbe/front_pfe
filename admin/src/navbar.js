@@ -1,10 +1,46 @@
-import React, { useState } from "react";
+import React, { useState , useCallback} from "react";
 import { useNavigate } from "react-router-dom";
 import './navbar.css';
-import { Link } from "react-router-dom";
+import { Link  } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 function CustomNavbar() {
-   
+  const [searchTerm, setSearchTerm] = useState('');
+
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleChange = useCallback((e) => {
+    setSearchTerm(e.target.value);
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+      navigate(`/all?search=${searchTerm}`);
+    
+  };
+  const handleSearch = useCallback((e) => {
+    e.preventDefault();
+    let searchVariable;
+
+    switch (location.pathname) {
+      case '/user':
+        searchVariable = 'user';
+        break;
+      case '/all':
+        searchVariable = 'all';
+        break;
+      // Ajoutez d'autres cas selon les besoins
+      default:
+        searchVariable = 'default';
+        // Définir le comportement par défaut ou traiter l'erreur
+    }
+
+    console.log(`Recherche pour ${searchVariable}: ${searchTerm}`);
+    navigate(`/${searchVariable}?search=${searchTerm}`);
+    // Intégrer ici la logique de recherche en utilisant searchVariable et searchTerm
+    // Par exemple, effectuer une requête API ou filtrer des données
+  }, [searchTerm, location.pathname]);
     return (
       <div>
       <header id="header" className="header fixed-top d-flex align-items-center">
@@ -19,8 +55,9 @@ function CustomNavbar() {
   
       <div className="search-bar">
         <form className="search-form d-flex align-items-center" method="POST" action="#">
-          <input type="text" name="query" placeholder="Search" title="Enter search keyword"/>
-          <button type="submit" title="Search"><i className="bi bi-search"></i></button>
+          <input type="text" name="query" placeholder="Search" value={searchTerm} 
+          onChange={handleChange} title="Enter search keyword"/>
+          <button type="submit" title="Search" onClick={handleSearch }><i className="bi bi-search"></i></button>
         </form>
       </div>
   
@@ -248,107 +285,37 @@ function CustomNavbar() {
         </li>
   
         <li className="nav-item">
-          <a className="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-            <i className="bi bi-menu-button-wide"></i><span>Demande</span><i className="bi bi-chevron-down ms-auto"></i>
+        <Link  to='/all'>
+          <a className="nav-link collapsed" data-bs-target="#components-nav"  href="#">
+            <i className="bi bi-menu-button-wide"></i><span>Demande</span>
           </a>
-          <ul id="components-nav" className="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-              <a routerLink="/admin/addstudent"  >
-                <i className="bi bi-circle"></i><span >ajouter un demande</span>
-              </a>
-            </li>
-            <li>
-            <Link  to='/all'>
-              <a routerLink="/admin/home">
-                <i className="bi bi-circle"></i><span>list </span>
-              </a>
-              </Link>
-            </li>
-           
-           
-          
-            
-          
-           
-          
-          </ul>
+          </Link>
+         
         </li>
   
         <li className="nav-item">
-          <a className="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-            <i className="bi bi-journal-text"></i><span>User</span><i className="bi bi-chevron-down ms-auto"></i>
+        <Link  to='/user'>
+          <a className="nav-link collapsed" >
+            <i className="bi bi-journal-text"></i><span>User</span>
           </a>
-          <ul id="forms-nav" className="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-            <Link  to='/add'>
-              <a routerLink="/admin/addteacher">
-                <i className="bi bi-circle"></i><span >add user</span>
-              </a>
-              </Link>
-              ..
-              
-            </li>
-            <li>
-            <Link  to='/user'>
-              <a >
-                <i className="bi bi-circle"></i><span>Liste user</span>
-              </a>
-              </Link>
-            </li>
-          
-           
-          </ul>
+         </Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-            <i className="bi bi-journal-text"></i><span>Comptes</span><i className="bi bi-chevron-down ms-auto"></i>
+        <Link  to='/compte'>
+          <a className="nav-link collapsed"   >
+            <i className="bi bi-journal-text"></i><span>Comptes</span>
           </a>
-          <ul id="forms-nav" className="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-            <Link  to='/add'>
-              <a routerLink="/admin/addteacher">
-                <i className="bi bi-circle"></i><span >add user</span>
-              </a>
-              </Link>
-              ..
-              
-            </li>
-            <li>
-            <Link  to='/compte'>
-              <a >
-                <i className="bi bi-circle"></i><span>Liste comptes</span>
-              </a>
-              </Link>
-            </li>
+        </Link>
           
-           
-          </ul>
         </li>
   
         <li className="nav-item">
-          <a className="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-            <i className="bi bi-journal-text"></i><span>Services</span><i className="bi bi-chevron-down ms-auto"></i>
+        <Link  to='/transaction'>
+          <a className="nav-link collapsed"  >
+            <i className="bi bi-journal-text"></i><span>Services</span>
           </a>
-          <ul id="forms-nav" className="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-            <Link  to='/transaction'>
-              <a routerLink="/admin/addteacher">
-                <i className="bi bi-circle"></i><span >transaction</span>
-              </a>
-              </Link>
-              ..
-              
-            </li>
-            <li>
-            <Link  to='/user'>
-              <a >
-                <i className="bi bi-circle"></i><span>Liste user</span>
-              </a>
-              </Link>
-            </li>
+          </Link>
           
-           
-          </ul>
         </li>
   
     

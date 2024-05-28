@@ -34,9 +34,9 @@ function Login() {
           
           console.log(user);
           if(user.email=="chaher@gmail.com"){
-            navigate("/all");
-          }else{
             navigate("/");
+          }else{
+            navigate("/login");
           }
           console.log("Login successful!");
          // Redirect to Home component after successful login

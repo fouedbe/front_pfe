@@ -48,7 +48,7 @@ function Compte() {
         setCompte(response.data);
         
         compte && compte.forEach((compteItem) => {
-          if(compteItem.id_user ===userId){
+          if(compteItem.id_user===userId){
               setsolde(compteItem.solde);
           }else{
             console.log("tu n'est pas un compte")
@@ -65,7 +65,7 @@ function Compte() {
     // Appeler la fonction fetchData pour récupérer les données
     fetchData1();
  
-  }, []);
+  }, [solde]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

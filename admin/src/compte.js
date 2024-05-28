@@ -30,6 +30,8 @@ export default function Comptes() {
     const [modalActualizar, setModalActualizar]=useState(false);
     const [model,setModal]=useState(false);
     const [confmodel,setConfModal]=useState(false);
+    
+   
     useEffect(() => {
         // Fonction asynchrone pour effectuer la requête
         const fetchData = async () => {
@@ -165,7 +167,9 @@ export default function Comptes() {
             </thead>
 
             <tbody>
-              {Comptes && Comptes.map((data) => (
+              {Comptes && Comptes
+              
+              .map((data) => (
                 <tr key={data.id}>
                   
                   <td>{data.num_compte}</td>
@@ -288,7 +292,9 @@ export default function Comptes() {
               />
             </FormGroup>
             <FormGroup>
-           
+            <label>
+                choisir id pour user:
+              </label><br />
             <select name="id_user" value={compteData.id_user} onChange={handleChangee}>
             {Users && Users
             .filter(Users => Users.role === 'USER')
@@ -315,6 +321,9 @@ export default function Comptes() {
               />
             </FormGroup>
             <FormGroup>
+            <label>
+                choisir type de compte:
+              </label><br />
             <select name="type" value={compteData.type} onChange={handleChangee}>
             <option value="">Select type</option>
             <option value="courant">courant</option>
