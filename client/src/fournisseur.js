@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import logo from "./logo.svg";
 import "./alldemande.css";
-import { useLocation } from 'react-router-dom';
 import axios from "axios";
 import FileSaver from "file-saver";
 import * as XLSX from 'xlsx';
@@ -22,40 +21,39 @@ import {
 
 
 
-export default function Demandes() {
-  
-  const location = useLocation();
+export default function Fournisseur() {
+  const [searchTerm, setSearchTerm] = useState('');
+   const [username, setusername] = useState(null);
     const [Users, setUser] = useState(null);
-    
     const [Demandes, setDemandes] = useState(null);
-    const[updatedDemande,setUpdatedDemande]=useState({title:"",description:"",quantity:0,lieu:"",date:"",fournisseur:"",prix:0
+    const[updatedDemande,setUpdatedDemande]=useState({title:"",description:"",quantity:"",lieu:"",date:"",fournisseur:""
     });
     const [demandeData, setDemandesData] = useState({
         title: "",
         description: "",
         quantity: "",
-        lieu:""
-        
+        lieu:"",
+        emailuser:"",
+        satatus:""
          
       });
     const [modalActualizar, setModalActualizar]=useState(false);
     const [model,setModal]=useState(false);
     const [confmodel,setConfModal]=useState(false);
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const searchParams = new URLSearchParams(location.search);
-  const search = searchParams.get('search') || '';
+    
     useEffect(() => {
-      
         // Fonction asynchrone pour effectuer la requête
         const fetchData = async () => {
           try {
-            
+            const token = localStorage.getItem("token");
+            const decode = jwtDecode(token);
+               setusername(decode.name);
+               console.log(username);
             // Faire la requête GET à l'API
             const response = await axios.get('http://localhost:8000/api/demande/all');
-           
+    
             // Récupérer les données de la réponse et les stocker dans l'état
             setDemandes(response.data);
-           
             console.log(localStorage);
           } catch (error) {
             // Gérer les erreurs en cas d'échec de la requête
@@ -94,8 +92,7 @@ export default function Demandes() {
             Title: item.title,
             Description: item.description,
             Quantity: item.quantity,
-            emailuser: item.emailuser,
-            nombre:Demandes.length
+            Price: item.price,
           }));
       
           const ws = XLSX.utils.json_to_sheet(exportData);
@@ -125,7 +122,7 @@ export default function Demandes() {
           alert('User updated successfully!');
           // Réinitialiser les champs après la mise à jour
           setUpdatedDemande({
-            title:"",description:"",quantity:0,lieu:"",fournisseur:"",prix:0
+            title:"",description:"",quantity:"",lieu:""
             // Réinitialiser d'autres champs utilisateur si nécessaire
           });
           setModalActualizar(false);
@@ -172,8 +169,8 @@ export default function Demandes() {
         try {
           const token = localStorage.getItem("token");
           const decode = jwtDecode(token);
-             
           demandeData.emailuser=decode.email;
+          demandeData.status="En attente";
           // Make a POST request to the backend endpoint for adding users
           const response = await axios.post(
             "http://localhost:8000/api/demande/add",
@@ -187,54 +184,67 @@ export default function Demandes() {
         }
       };
     return (
-      <div className="reg">
-        <Container>
-        <br />
-          <Button color="success" onClick={() => adddemande()}>Créer</Button>
-          <Button color="success" onClick={ExportHandler}>Excel</Button>
-          <br />
-          <br />
-          <Table>
-            <thead>
-              <tr>
+      
+      <div className="demandeall">
+     
+      <main className="tablee" >
+        <section className="table__header">
+            <h1>Customer's Orders</h1>
+            <div className="input-groupp">
+                <input type="search" placeholder="Search Data..."  value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}/>
+                <img src="../public/assets/img/search.png" alt="" />
+            </div>
+            <h1>add demande :</h1>
+            <div className="export__file">
+           
+                <label for="export-file" className="export__file-btn" title="Export File" onClick={() => adddemande()}></label>
                
-                <th>title</th>
-                <th>description</th>
-                <th>quantity</th>
-                <th>prix</th>
-                <th>date</th>
-                <th>fournisseur</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {Demandes &&Demandes
-              .filter(Demandes => search.trim() === '' || Demandes.title.toLowerCase().includes(search.toLowerCase()))
+            </div>
+        </section>
+        <section className="table__body">
+            <table >
+                <thead >
+                    <tr >
+                    
+               
+               <th><h1>title</h1></th>
+               <th><h1>description</h1></th>
+               <th><h1>quantity</h1></th>
+               <th><h1>satatus</h1></th>
+             
+                    </tr>
+                </thead>
+                <tbody >
+                {Demandes &&Demandes
+              .filter(Demandes => Demandes.fournisseur === username &&
+                Demandes.title.toLowerCase().includes(searchTerm.toLowerCase()) )
               .map((data) => (
                 <tr key={data.id}>
                   
                   <td>{data.title}</td>
                   <td>{data.description}</td>
-                  <th>{data.quantity}</th>
-                  <th>{data.prix}</th>
-                  <th>{data.date}</th>
-                  <th>{data.fournisseur}</th>
+                  <td>{data.quantity}</td>
+                  <td>{data.status}</td>
+                  
                   <td>
                     <Button
                       color="primary"
                       onClick={() =>update(data)}
                     >
-                      update
+                      <i className="fas fa-edit"></i>
                     </Button>{" "}
-                    <Button color="primary"  onClick={() =>confirm(data)}>confirm</Button>
-                    <Button color="danger"  onClick={() => handleDelete(data._id)}>delete</Button>
+                    
+                    <Button color="danger"  onClick={() => handleDelete(data._id)}> <i className="fas fa-trash-alt"></i> </Button>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Container>
-
+              ))}  
+                   
+                </tbody>
+            </table>
+        </section>
+    </main>
+      
         <Modal isOpen={modalActualizar}  >
         
           <ModalHeader>
@@ -408,23 +418,10 @@ export default function Demandes() {
               </label>
               <input
                 className="form-control"
-                name="date"
+                name="description"
                 type="date"
                 onChange={handleChange}
                 value={updatedDemande.date}
-              />
-            </FormGroup>
-              
-            <FormGroup>
-              <label>
-                prix
-              </label>
-              <input
-                className="form-control"
-                name="prix"
-                type="text"
-                onChange={handleChange}
-                value={updatedDemande.prix}
               />
             </FormGroup>
             <FormGroup>
@@ -462,6 +459,7 @@ export default function Demandes() {
           </ModalFooter>
         </Modal>
       </div>
+    
     );
   
 }

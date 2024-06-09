@@ -24,8 +24,8 @@ function Transaction() {
       const userId1 =transctionData.num_compte1;
       const userId2 =transctionData.num_compte2;
       console.log(userData2);
-      await axios.put(`http://localhost:8000/api/users/depot/${userId1}`,transctionData);
-      await axios.put(`http://localhost:8000/api/users/ajout/${userId2}`,transctionData);
+      await axios.put(`http://localhost:8000/api/users/retrait/${userId1}`,transctionData);
+      await axios.put(`http://localhost:8000/api/users/depot/${userId2}`,transctionData);
       navigate("/compte")
       console.log("Update successful:");
       

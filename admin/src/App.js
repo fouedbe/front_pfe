@@ -13,7 +13,7 @@ import { ToastContainer } from 'react-toastify';
 import  {useState,useEffect} from 'react';
 import Comptes from './compte';
 import Transaction from './transaction';
-
+import History from './history';
 function App() {
   const navigate = useNavigate();
 
@@ -39,7 +39,7 @@ function App() {
                 <Route exact path="/add" element={<AddUser/>} />
                 <Route exact path="/user" element={<Users/>} />
                 <Route exact path="/compte" element={<Comptes/>} />
-               
+                <Route exact path="/history" element={<History/>} />
               </Routes>
             </div>
           </main>

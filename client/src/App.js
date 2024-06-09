@@ -5,7 +5,7 @@ import Navbar from './navbar';
 import Demandes from'./alldemande';
 import Login from './login';
 import { useNavigate } from "react-router-dom";
-
+import Fournisseur from './fournisseur';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { ToastContainer } from 'react-toastify';
@@ -32,12 +32,12 @@ function App() {
                 <Route exact path="/compte" element={<Compte />} /> 
                 <Route exact path="/register" element={<Register />} />
                 <Route exact path="/all" element={<Demandes />} /> 
-                <Route exact path="/login" element={<Login />} />
+                <Route exact path="/" element={<Login />} />
                 <Route exact path="/forget" element={<Forget />} />
                 <Route exact path="/updatepass" element={<Updatepass />} />
                 <Route exact path="/confirmation" element={<Confirmation />} />
                 <Route exact path="/transaction" element={<Transaction/>} />
-               
+                <Route exact path="/fournisseur" element={<Fournisseur/>} />
               </Routes>
             </div>
           </main>

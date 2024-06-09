@@ -46,10 +46,12 @@ function CustomNavbar() {
       <header id="header" className="header fixed-top d-flex align-items-center">
       
       <div className="d-flex align-items-center justify-content-between">
+      <Link  to='/all'>
         <a href="/home" className="logo d-flex align-items-center">
           <img src="assets/img/logo.png" alt=""/>
           <span className="d-none d-lg-block">Tek up</span>
         </a>
+        </Link>
         <i className="bi bi-list toggle-sidebar-btn"></i>
       </div>
   
@@ -313,6 +315,14 @@ function CustomNavbar() {
         <Link  to='/transaction'>
           <a className="nav-link collapsed"  >
             <i className="bi bi-journal-text"></i><span>Services</span>
+          </a>
+          </Link>
+          
+        </li>
+        <li className="nav-item">
+        <Link  to='/history'>
+          <a className="nav-link collapsed"  >
+            <i className="bi bi-journal-text"></i><span>History</span>
           </a>
           </Link>
           

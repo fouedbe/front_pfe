@@ -29,7 +29,7 @@ function Navbar() {
                         <span class="fermer">Fermer <i class='bx bx-x'></i></span>
                     </div>
                     <ul class="nav_list d-flex">
-                    <Link  to='/compte'>
+                    <Link  to='/all'>
                         <li class="nav-item">
                             <a  class="nav-link">Accueil</a>
                         </li>

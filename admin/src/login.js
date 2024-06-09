@@ -7,10 +7,10 @@ import useAuth from './auth';
 import  {useState} from 'react';
 import { useNavigate } from "react-router-dom";
 function Login() {
-  const { updateUserRole } = useAuth();
+  
     const navigate = useNavigate();
     const [user,setUser]=useState({email : "", password:""});
-    const [ok,setok]=useState(false);
+   
     const handleChange = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
       };
@@ -33,10 +33,10 @@ function Login() {
           setAuth(token)
           
           console.log(user);
-          if(user.email=="chaher@gmail.com"){
+          if(user.email =="chaher@gmail.com"){
             navigate("/");
           }else{
-            navigate("/login");
+            navigate("/");
           }
           console.log("Login successful!");
          // Redirect to Home component after successful login
