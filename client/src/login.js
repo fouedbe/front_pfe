@@ -3,7 +3,8 @@ import './login.css';
 import { jwtDecode } from 'jwt-decode';
 import { setAuth } from './setauth';
 import axios from "axios";
-import useAuth from './auth';
+import axiosInstance from './auth';
+
 import  {useState} from 'react';
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -12,7 +13,7 @@ function Login() {
   var LoginForm = document.getElementById("LoginForm");
   var RegForm = document.getElementById("RegForm");
   var Indicator = document.getElementById("Indicator");
-  const { updateUserRole } = useAuth();
+  
     const navigate = useNavigate();
     const [user,setUser]=useState({email : "", password:""});
     const [activeForm, setActiveForm] = useState('login'); 
@@ -25,15 +26,15 @@ function Login() {
         e.preventDefault();
     
         try {
-          const response = await axios.post(
-            "http://localhost:8000/api/auth/login",
+          const response = await axiosInstance.post(
+            "/auth/login",
             user
           );
           const { token } = response.data; // Access role from server response
-          console.log("Role from server:", user.role);
+         
           localStorage.setItem("token", token);
           const decode = jwtDecode(token)
-         
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
           console.log(decode);
           
           setAuth(token)

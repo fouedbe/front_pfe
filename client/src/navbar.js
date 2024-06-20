@@ -7,7 +7,7 @@ function Navbar() {
     const navigate = useNavigate();
     const Logout = ()=>{
         localStorage.removeItem('token')
-        navigate('/login');
+        navigate('/');
 
     }
   return (
@@ -44,9 +44,11 @@ function Navbar() {
                             <a  class="nav-link">Transaction</a>
                         </li>
                         </Link>
+                        <Link  to='/pret'>
                         <li class="nav-item">
                             <a  class="nav-link">prêts immobiliers</a>
                         </li>
+                        </Link>
                         <li class="nav-item">
                             <a href="contact.html" class="nav-link">Contact</a>
                         </li>

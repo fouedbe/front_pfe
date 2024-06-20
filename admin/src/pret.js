@@ -23,13 +23,18 @@ import {
 
 
 
-export default function Demandes() {
+export default function Pret() {
   
   const location = useLocation();
     const [Users, setUser] = useState(null);
     
-    const [Demandes, setDemandes] = useState(null);
-    const[updatedDemande,setUpdatedDemande]=useState({title:"",description:"",quantity:0,lieu:"",date:"",fournisseur:"",prix:0
+    const [prets, setprets] = useState(null);
+    const[updatedpret,setUpdatedpret]=useState({  name: '',
+    email: '',
+    loanAmount: '',
+    loanTerm: '',
+    interestRate: '',
+    propertyValue: '',
     });
     const [demandeData, setDemandesData] = useState({
         title: "",
@@ -52,10 +57,10 @@ export default function Demandes() {
           try {
            
             // Faire la requête GET à l'API
-            const response = await axiosInstance.get('/demande/all');
+            const response = await axiosInstance.get('/pret/all');
            
             // Récupérer les données de la réponse et les stocker dans l'état
-            setDemandes(response.data);
+            setprets(response.data);
            
             console.log(localStorage);
           } catch (error) {
@@ -90,13 +95,13 @@ export default function Demandes() {
           const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
           const fileExtension = '.xlsx';
       
-          const exportData = Demandes.map(item => ({
+          const exportData = prets.map(item => ({
             // Customize this according to your data structure
             Title: item.title,
             Description: item.description,
             Quantity: item.quantity,
             emailuser: item.emailuser,
-            nombre:Demandes.length
+           
           }));
       
           const ws = XLSX.utils.json_to_sheet(exportData);
@@ -109,7 +114,7 @@ export default function Demandes() {
 
       const handleChange = (e) => {
        
-        setUpdatedDemande({ ...updatedDemande, [e.target.name]: e.target.value });
+        setUpdatedpret({ ...updatedpret, [e.target.name]: e.target.value });
       };
       const handleChangee = (e) => {
        
@@ -119,14 +124,19 @@ export default function Demandes() {
       const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const userId = updatedDemande._id;
+            const userId = updatedpret._id;
             console.log(userId)
           // Mettre à jour l'utilisateur sur le serveur
-           await axios.put(`http://localhost:8000/api/demande/update/${userId}`, updatedDemande);
+           await axios.put(`http://localhost:8000/api/pret/update/${userId}`, updatedpret);
           alert('User updated successfully!');
           // Réinitialiser les champs après la mise à jour
-          setUpdatedDemande({
-            title:"",description:"",quantity:0,lieu:"",fournisseur:"",prix:0
+          setUpdatedpret({
+            name: '',
+      email: '',
+      loanAmount: '',
+      loanTerm: '',
+      interestRate: '',
+      propertyValue: '',
             // Réinitialiser d'autres champs utilisateur si nécessaire
           });
           setModalActualizar(false);
@@ -139,13 +149,13 @@ export default function Demandes() {
       const update = (data) => {
         // Mettre en œuvre la logique pour la mise à jour des données ici
         console.log("Data to update:", data);
-        setUpdatedDemande(data);
+        setUpdatedpret(data);
         setModalActualizar(true);
       };
       const confirm = (data) => {
         // Mettre en œuvre la logique pour la mise à jour des données ici
         console.log("Data to update:", data);
-        setUpdatedDemande(data);
+        setUpdatedpret(data);
         setConfModal(true);
       };
       const cancel = () => {
@@ -162,8 +172,8 @@ export default function Demandes() {
       };
       const handleDelete = async (id) => {
         try {
-          await axios.delete(`http://localhost:8000/api/demande/${id}`);
-          setDemandes(Demandes.filter((Demandes) => Demandes._id !== id));
+          await axios.delete(`http://localhost:8000/api/pret/${id}`);
+          setprets(prets.filter((prets) => prets._id !== id));
         } catch (error) {
           console.error('Error deleting demandes:');
         }
@@ -199,27 +209,26 @@ export default function Demandes() {
             <thead>
               <tr>
                
-                <th>title</th>
-                <th>description</th>
-                <th>quantity</th>
-                <th>prix</th>
-                <th>date</th>
-                <th>fournisseur</th>
+                <th>name</th>                 
+                <th>loanAmount</th>
+                <th>loanTerm</th>
+                <th>interestRate</th>
+                <th>propertyValue</th>
               </tr>
             </thead>
 
             <tbody>
-              {Demandes &&Demandes
-              .filter(Demandes => search.trim() === '' || Demandes.title.toLowerCase().includes(search.toLowerCase()))
+              {prets &&prets
+              .filter(prets => search.trim() === '' || prets.name.toLowerCase().includes(search.toLowerCase()))
               .map((data) => (
                 <tr key={data.id}>
                   
-                  <td>{data.title}</td>
-                  <td>{data.description}</td>
-                  <th>{data.quantity}</th>
-                  <th>{data.prix}</th>
-                  <th>{data.date}</th>
-                  <th>{data.fournisseur}</th>
+                  <td>{data.name}</td>
+                  <td>{data.loanAmount}</td>
+                  <th>{data.loanTerm}</th>
+                  <th>{data.interestRate}</th>
+                  <th>{data.propertyValue}</th>
+                  
                   <td>
                     <Button
                       color="primary"
@@ -253,44 +262,44 @@ export default function Demandes() {
                 readOnly
                 type="text"
                 
-                value={updatedDemande._id}
+                value={updatedpret._id}
               />
             </FormGroup>
             <FormGroup>
               <label>
-                title 
+              loanAmount 
               </label>
               <input
                 className="form-control"
-                name="title"
+                name="loanAmount"
                 type="text"
                 onChange={handleChange}
-                value={updatedDemande.title}
+                value={updatedpret.loanAmount}
               />
             </FormGroup>
             
             <FormGroup>
               <label>
-                description
+              loanTerm
               </label>
               <input
                 className="form-control"
-                name="description"
+                name="loanTerm"
                 type="text"
                 onChange={handleChange}
-                value={updatedDemande.description}
+                value={updatedpret.loanTerm}
               />
             </FormGroup>
             <FormGroup>
               <label>
-               quantity
+              interestRate
               </label>
             
               <input
                 className="form-control"
-                name="quantity"
+                name="interestRate"
                 type="text"
-                value={updatedDemande.quantity}
+                value={updatedpret.interestRate}
                 onChange={handleChange}
               />
             </FormGroup>
@@ -319,7 +328,7 @@ export default function Demandes() {
 
         <Modal isOpen={model} >
           <ModalHeader >
-           <div><h3>add demande </h3></div>
+           <div><h3>add pret immobilier </h3></div>
           </ModalHeader>
 
           <ModalBody  >
@@ -397,7 +406,7 @@ export default function Demandes() {
                 readOnly
                 type="text"
                 
-                value={updatedDemande._id}
+                value={updatedpret._id}
                 
                 
               />
@@ -409,41 +418,27 @@ export default function Demandes() {
               </label>
               <input
                 className="form-control"
-                name="date"
-                type="date"
+                name="email"
+                type="text"
                 onChange={handleChange}
-                value={updatedDemande.date}
+                value={updatedpret.email}
               />
             </FormGroup>
               
             <FormGroup>
               <label>
-                prix
+              interestRate
               </label>
               <input
                 className="form-control"
-                name="prix"
+                name="interestRate"
                 type="text"
                 onChange={handleChange}
-                value={updatedDemande.prix}
+                value={updatedpret.interestRate}
               />
             </FormGroup>
-            <FormGroup>
-            <label>
-            fournisseur
-              </label> <br />
-            <select name="fournisseur" value={updatedDemande.fournisseur} onChange={handleChange}>
-            {Users && Users
-            .filter(Users => Users.role === 'FOURNISSEUR')
-            .map((item) => (
-          <option key={item.role} value={item.value}>
-            {item.username}
-          </option>
-        ))}
+           
             
-          </select>
-          
-          </FormGroup>
             
             
           </ModalBody>

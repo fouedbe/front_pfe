@@ -53,6 +53,7 @@ export default function Demandes() {
     
             // Récupérer les données de la réponse et les stocker dans l'état
             setDemandes(response.data);
+            
             console.log(localStorage);
           } catch (error) {
             // Gérer les erreurs en cas d'échec de la requête

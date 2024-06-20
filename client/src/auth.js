@@ -1,37 +1,28 @@
-import { useState, useEffect } from "react";
-import { jwtDecode } from 'jwt-decode';
-const useAuth = () => {
-  const [user, setUser] = useState({ isAuthenticated: false, role: null });
+import axios from 'axios';
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-      
+// Créez une instance d'Axios
+const axiosInstance = axios.create({
+  baseURL: 'http://localhost:8000/api', // Remplacez par l'URL de base de votre API
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Ajoutez un intercepteur de requête pour inclure le token JWT
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('jwt');
     if (token) {
-      try {
-        // Parse the JWT token to extract user information
-        const tokenParts = token.split('.');
-        const payload = JSON.parse(atob(tokenParts[1]));
-        const userRole = payload.role;
-        
-      
-        setUser({ isAuthenticated: true, role: userRole });
-        //console.log("User set:", { isAuthenticated: true, role: userRole });
-      } catch (error) {
-        console.error("Error parsing token:", error);
-        setUser({ isAuthenticated: false, role: null });
-      }
+      console.log('Adding token to request headers:', token); // Log le token
+      config.headers.Authorization = `${token}`;
     } else {
-      setUser({ isAuthenticated: false, role: null });
+      console.log('No token found in localStorage'); // Log si aucun token n'est trouvé
     }
-  }, []);
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
-  const updateUserRole = (newRole) => {
-    setUser(prevUser => ({ ...prevUser, role: newRole }));
-  };
-
-  const isAuthenticated = user.isAuthenticated;
-
-  return { user, updateUserRole, isAuthenticated };
-};
-
-export default useAuth;
+export default axiosInstance;

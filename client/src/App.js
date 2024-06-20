@@ -14,6 +14,7 @@ import Compte from './compte';
 import Transaction from './transaction';
 import Forget from './forget_password';
 import Updatepass from './updatepassword';
+import Immobilaire from './pret_immobilaire';
 function App() {
   const navigate = useNavigate();
 
@@ -38,6 +39,7 @@ function App() {
                 <Route exact path="/confirmation" element={<Confirmation />} />
                 <Route exact path="/transaction" element={<Transaction/>} />
                 <Route exact path="/fournisseur" element={<Fournisseur/>} />
+                <Route exact path="/pret" element={<Immobilaire/>} />
               </Routes>
             </div>
           </main>

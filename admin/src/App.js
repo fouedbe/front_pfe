@@ -14,12 +14,11 @@ import  {useState,useEffect} from 'react';
 import Comptes from './compte';
 import Transaction from './transaction';
 import History from './history';
+import Pret from './pret';
 function App() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    navigate('/login'); // Redirige vers la page de connexion au montage du composant
-  }, []);
+
 
 
   return (
@@ -40,6 +39,7 @@ function App() {
                 <Route exact path="/user" element={<Users/>} />
                 <Route exact path="/compte" element={<Comptes/>} />
                 <Route exact path="/history" element={<History/>} />
+                <Route exact path="/pret" element={<Pret/>} />
               </Routes>
             </div>
           </main>

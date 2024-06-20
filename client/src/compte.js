@@ -42,19 +42,21 @@ function Compte() {
     const fetchData1 = async () => {
       try {
         
-        // Faire la requête GET à l'API
-        const response = await axios.get('http://localhost:8000/api/compte/all');
-       
-        setCompte(response.data);
+        const response = await axios.get("http://localhost:8000/api/compte/all");
+        const comptes=(response.data);
+
+        const token = localStorage.getItem("token");
+        const decode = jwtDecode(token);
+        const userId = decode.id;
         
-        compte && compte.forEach((compteItem) => {
-          if(compteItem.id_user===userId){
-              setsolde(compteItem.solde);
-          }else{
-            console.log("tu n'est pas un compte")
-          }
-        });
-   
+        const userCompte = comptes.find(compteItem => compteItem.id_user === userId);
+      
+        if (userCompte) {
+          setsolde(userCompte.solde);
+          console.log(userCompte);
+        } else {
+          console.log("Vous n'avez pas de compte");
+        }
         
       } catch (error) {
         // Gérer les erreurs en cas d'échec de la requête
@@ -65,7 +67,7 @@ function Compte() {
     // Appeler la fonction fetchData pour récupérer les données
     fetchData1();
  
-  }, [solde]);
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -102,7 +104,7 @@ function Compte() {
           <div className="input_register">
             <input
               type="password"
-              placeholder="Create password"
+              placeholder="change password"
               className="password"
               name="password" onChange={handleChange}   required value={compteData.password}
             />

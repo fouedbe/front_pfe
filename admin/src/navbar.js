@@ -328,7 +328,14 @@ function CustomNavbar() {
           
         </li>
   
-    
+        <li className="nav-item">
+        <Link  to='/pret'>
+          <a className="nav-link collapsed"  >
+            <i className="bi bi-journal-text"></i><span>Pret Immobilier</span>
+          </a>
+          </Link>
+          
+        </li>
   
      
   

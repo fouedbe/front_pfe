@@ -1,6 +1,7 @@
 import React from 'react';
 import './login.css';
 import { jwtDecode } from 'jwt-decode';
+
 import { setAuth } from './setauth';
 import axios from "axios";
 import useAuth from './auth';
@@ -24,12 +25,14 @@ function Login() {
             user
           );
           const { token } = response.data; // Access role from server response
-          console.log("Role from server:", user.role);
-          localStorage.setItem("token", token);
-          const decode = jwtDecode(token)
-         
-          console.log(decode);
           
+         
+          
+         localStorage.setItem('jwt', token)
+         console.log(token)
+         const decode = jwtDecode(token)
+          console.log(decode);
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
           setAuth(token)
           
           console.log(user);
